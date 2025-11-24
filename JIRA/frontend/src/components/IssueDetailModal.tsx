@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { issuesAPI, usersAPI } from '../services/api';
 import { toast } from 'react-toastify';
-import { useAuth } from '../contexts/AuthContext';
+//import { useAuth } from '../contexts/AuthContext';
 import type { Issue, User, Comment } from '../types';
 
 interface IssueDetailModalProps {
@@ -15,7 +15,7 @@ const IssueDetailModal: React.FC<IssueDetailModalProps> = ({ issue: initialIssue
   const [users, setUsers] = useState<User[]>([]);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
+  
 
   useEffect(() => {
     loadIssueDetails();
@@ -182,7 +182,7 @@ const IssueDetailModal: React.FC<IssueDetailModalProps> = ({ issue: initialIssue
               <label>Assignee</label>
               <select
                 value={issue.assigneeId || ''}
-                onChange={(e) => handleUpdate({ assigneeId: e.target.value || null })}
+                onChange={(e) => handleUpdate({ assigneeId: e.target.value || undefined })}
               >
                 <option value="">Unassigned</option>
                 {users.map((u) => (

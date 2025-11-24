@@ -43,8 +43,6 @@ const IssueCard: React.FC<IssueCardProps> = ({ issue, onClick }) => {
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
       className="issue-card"
       onClick={onClick}
     >
@@ -54,6 +52,14 @@ const IssueCard: React.FC<IssueCardProps> = ({ issue, onClick }) => {
           className="issue-priority"
           style={{ backgroundColor: priorityColors[issue.priority] }}
         />
+        <span
+          className="drag-handle"
+          {...attributes}
+          {...listeners}
+          style={{ cursor: 'grab' }}
+        >
+          ⋮⋮
+        </span>
       </div>
       <div className="issue-card-title">{issue.title}</div>
       <div className="issue-card-footer">

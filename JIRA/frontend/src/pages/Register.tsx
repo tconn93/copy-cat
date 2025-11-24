@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+// import { useNavigate } from 'react-router-dom';
+// import { useAuth } from '../contexts/AuthContext';
+import api from '../services/api';
 import { toast } from 'react-toastify';
 
 const Register: React.FC = () => {
@@ -9,8 +10,8 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
-  const navigate = useNavigate();
+  // const { user } = useAuth();
+  // const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,9 +29,12 @@ const Register: React.FC = () => {
     setLoading(true);
 
     try {
-      await register(email, password, name);
-      toast.success('Registration successful!');
-      navigate('/projects');
+      await api.post('/auth/register', { email, password, name });
+      toast.success('User created successfully!');
+      setName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Registration failed');
     } finally {
@@ -93,9 +97,9 @@ const Register: React.FC = () => {
             {loading ? 'Creating account...' : 'Sign Up'}
           </button>
         </form>
-        <p className="auth-link">
-          Already have an account? <Link to="/login">Sign In</Link>
-        </p>
+  <p className="auth-link">
+    Creating users as admin.
+  </p>
       </div>
     </div>
   );
