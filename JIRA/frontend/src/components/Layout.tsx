@@ -19,6 +19,9 @@ const Layout: React.FC = () => {
         </div>
         <div className="navbar-menu">
           <Link to="/projects" className="navbar-item">Projects</Link>
+          {user?.role === 'ADMIN' && (
+            <Link to="/users" className="navbar-item">Users</Link>
+          )}
         </div>
         <div className="navbar-end">
           {user && (

@@ -5,6 +5,18 @@ export const getSprintsByProject = async (req, res, next) => {
   try {
     const { projectId } = req.params;
 
+    // Check if user is a member of the project
+    const projectMember = await prisma.projectMember.findFirst({
+      where: {
+        projectId,
+        userId: req.user.id
+      }
+    });
+
+    if (!projectMember) {
+      return res.status(403).json({ error: 'You do not have access to this project' });
+    }
+
     const sprints = await prisma.sprint.findMany({
       where: { projectId },
       include: {
@@ -55,6 +67,18 @@ export const getSprintById = async (req, res, next) => {
       return res.status(404).json({ error: 'Sprint not found' });
     }
 
+    // Check if user is a member of the project
+    const projectMember = await prisma.projectMember.findFirst({
+      where: {
+        projectId: sprint.projectId,
+        userId: req.user.id
+      }
+    });
+
+    if (!projectMember) {
+      return res.status(403).json({ error: 'You do not have access to this sprint' });
+    }
+
     res.json({ sprint });
   } catch (error) {
     next(error);
@@ -70,6 +94,18 @@ export const createSprint = async (req, res, next) => {
 
     const { projectId } = req.params;
     const { name, goal, startDate, endDate } = req.body;
+
+    // Check if user is a member of the project
+    const projectMember = await prisma.projectMember.findFirst({
+      where: {
+        projectId,
+        userId: req.user.id
+      }
+    });
+
+    if (!projectMember) {
+      return res.status(403).json({ error: 'You do not have access to this project' });
+    }
 
     const sprint = await prisma.sprint.create({
       data: {

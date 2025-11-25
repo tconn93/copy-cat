@@ -10,6 +10,9 @@ import Register from './pages/Register';
 import Projects from './pages/Projects';
 import Board from './pages/Board';
 import Issues from './pages/Issues';
+import Sprints from './pages/Sprints';
+import Users from './pages/Users';
+import ProjectSettings from './pages/ProjectSettings';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
@@ -36,6 +39,17 @@ const App: React.FC = () => {
             <Route path="projects" element={<Projects />} />
             <Route path="projects/:projectId/board" element={<Board />} />
             <Route path="projects/:projectId/issues" element={<Issues />} />
+            <Route path="projects/:projectId/sprints" element={<Sprints />} />
+            <Route path="projects/:projectId/settings" element={
+              <AdminRoute>
+                <ProjectSettings />
+              </AdminRoute>
+            } />
+            <Route path="users" element={
+              <AdminRoute>
+                <Users />
+              </AdminRoute>
+            } />
           </Route>
         </Routes>
         <ToastContainer position="bottom-right" autoClose={3000} />

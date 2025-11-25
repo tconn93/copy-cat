@@ -142,7 +142,8 @@ const Issues: React.FC = () => {
           >
             Board View
           </button>
-          <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
+          <button className="btn-secondary" onClick={() => navigate(`/projects/${projectId}/sprints`)}>Sprints</button>
+<button className="btn-primary" onClick={() => setShowCreateModal(true)}>
             Create Issue
           </button>
         </div>

@@ -6,6 +6,18 @@ export const getIssuesByProject = async (req, res, next) => {
     const { projectId } = req.params;
     const { status, assigneeId, type, sprintId } = req.query;
 
+    // Check if user is a member of the project
+    const projectMember = await prisma.projectMember.findFirst({
+      where: {
+        projectId,
+        userId: req.user.id
+      }
+    });
+
+    if (!projectMember) {
+      return res.status(403).json({ error: 'You do not have access to this project' });
+    }
+
     const where = { projectId };
     if (status) where.status = status;
     if (assigneeId) where.assigneeId = assigneeId;
@@ -105,6 +117,18 @@ export const getIssueById = async (req, res, next) => {
       return res.status(404).json({ error: 'Issue not found' });
     }
 
+    // Check if user is a member of the project
+    const projectMember = await prisma.projectMember.findFirst({
+      where: {
+        projectId: issue.projectId,
+        userId: req.user.id
+      }
+    });
+
+    if (!projectMember) {
+      return res.status(403).json({ error: 'You do not have access to this issue' });
+    }
+
     res.json({ issue });
   } catch (error) {
     next(error);
@@ -120,6 +144,18 @@ export const createIssue = async (req, res, next) => {
 
     const { projectId } = req.params;
     const { title, description, type, priority, assigneeId, sprintId, status } = req.body;
+
+    // Check if user is a member of the project
+    const projectMember = await prisma.projectMember.findFirst({
+      where: {
+        projectId,
+        userId: req.user.id
+      }
+    });
+
+    if (!projectMember) {
+      return res.status(403).json({ error: 'You do not have access to this project' });
+    }
 
     const issue = await prisma.issue.create({
       data: {

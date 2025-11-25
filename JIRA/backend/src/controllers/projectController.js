@@ -3,7 +3,15 @@ import { validationResult } from 'express-validator';
 
 export const getAllProjects = async (req, res, next) => {
   try {
+    // Only return projects where the user is a member
     const projects = await prisma.project.findMany({
+      where: {
+        members: {
+          some: {
+            userId: req.user.id
+          }
+        }
+      },
       include: {
         members: {
           include: {
@@ -57,6 +65,12 @@ export const getProjectById = async (req, res, next) => {
 
     if (!project) {
       return res.status(404).json({ error: 'Project not found' });
+    }
+
+    // Check if user is a member of the project
+    const isMember = project.members.some(member => member.userId === req.user.id);
+    if (!isMember) {
+      return res.status(403).json({ error: 'You do not have access to this project' });
     }
 
     res.json({ project });

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { projectsAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import type { Project } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 const Projects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -10,6 +11,7 @@ const Projects: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: '', key: '', description: '' });
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     loadProjects();
@@ -55,7 +57,18 @@ const Projects: React.FC = () => {
       <div className="projects-grid">
         {projects.map((project) => (
           <div key={project.id} className="project-card">
-            <div className="project-key">{project.key}</div>
+            <div className="project-card-header">
+              <div className="project-key">{project.key}</div>
+              {user?.role === 'ADMIN' && (
+                <button
+                  className="btn-icon"
+                  onClick={() => navigate(`/projects/${project.id}/settings`)}
+                  title="Project Settings"
+                >
+                  ⚙️
+                </button>
+              )}
+            </div>
             <h3>{project.name}</h3>
             <p>{project.description || 'No description'}</p>
             <div className="project-stats">
@@ -74,6 +87,12 @@ const Projects: React.FC = () => {
                 onClick={() => navigate(`/projects/${project.id}/issues`)}
               >
                 Issues
+              </button>
+              <button
+                className="btn-secondary btn-sm"
+                onClick={() => navigate(`/projects/${project.id}/sprints`)}
+              >
+                Sprints
               </button>
             </div>
           </div>

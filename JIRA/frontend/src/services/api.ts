@@ -58,9 +58,16 @@ export const usersAPI = {
     const response = await api.get<{ user: User }>(`/users/${id}`);
     return response.data.user;
   },
+  create: async (data: { email: string; password: string; name: string; role?: string; avatar?: string }) => {
+    const response = await api.post<{ user: User }>('/users', data);
+    return response.data.user;
+  },
   update: async (id: string, data: Partial<User>) => {
     const response = await api.put<{ user: User }>(`/users/${id}`, data);
     return response.data.user;
+  },
+  delete: async (id: string) => {
+    await api.delete(`/users/${id}`);
   },
 };
 
