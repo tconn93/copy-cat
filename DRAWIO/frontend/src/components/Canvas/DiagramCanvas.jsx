@@ -2,6 +2,8 @@ import { Stage, Layer, Line, Circle } from 'react-konva';
 import { useState } from 'react';
 import { useDiagram } from '../../store/DiagramContext';
 import { ShapeRenderer } from '../Shapes/ShapeRenderer';
+import { Rulers } from './Rulers';
+import { Guides } from './Guides';
 
 export function DiagramCanvas({ stageRef }) {
   const { state, dispatch } = useDiagram();
@@ -147,6 +149,8 @@ export function DiagramCanvas({ stageRef }) {
           />
         ))}
       </Layer>
+      <Guides />
+      <Rulers width={window.innerWidth} height={window.innerHeight} />
     </Stage>
   );
 }

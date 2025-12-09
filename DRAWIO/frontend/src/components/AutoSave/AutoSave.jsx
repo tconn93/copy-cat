@@ -1,12 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDiagram } from '../../store/DiagramContext';
 import { saveToLocalStorage, loadFromLocalStorage } from '../../utils/exportUtils';
 
 export function AutoSave() {
   const { state, dispatch } = useDiagram();
+  const hasLoadedRef = useRef(false);
 
   // Load from localStorage on mount
   useEffect(() => {
+    // Prevent loading twice (React StrictMode runs effects twice in dev)
+    if (hasLoadedRef.current) return;
+    hasLoadedRef.current = true;
+
     const shapes = loadFromLocalStorage();
     if (shapes.length > 0) {
       const shouldLoad = window.confirm(

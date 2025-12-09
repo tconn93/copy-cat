@@ -18,10 +18,42 @@
   color: #333;
 }
 
+.category-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.category-tab {
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.category-tab:hover {
+  background: #f0f0f0;
+  border-color: #bbb;
+}
+
+.category-tab.active {
+  background: #2196F3;
+  color: white;
+  border-color: #2196F3;
+}
+
 .shape-library {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .shape-button {

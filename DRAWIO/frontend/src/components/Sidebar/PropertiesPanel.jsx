@@ -55,6 +55,36 @@ export function PropertiesPanel() {
     });
   };
 
+  const handleOpacityChange = (e) => {
+    dispatch({
+      type: 'UPDATE_SHAPE',
+      payload: {
+        id: selectedShape.id,
+        updates: { opacity: parseFloat(e.target.value) },
+      },
+    });
+  };
+
+  const handleShadowBlurChange = (e) => {
+    dispatch({
+      type: 'UPDATE_SHAPE',
+      payload: {
+        id: selectedShape.id,
+        updates: { shadowBlur: parseFloat(e.target.value) },
+      },
+    });
+  };
+
+  const handleShadowColorChange = (e) => {
+    dispatch({
+      type: 'UPDATE_SHAPE',
+      payload: {
+        id: selectedShape.id,
+        updates: { shadowColor: e.target.value },
+      },
+    });
+  };
+
   return (
     <div className="properties-panel">
       <h3>Properties</h3>
@@ -114,6 +144,50 @@ export function PropertiesPanel() {
         />
         <span className="value-display">{selectedShape.strokeWidth || 2}px</span>
       </div>
+
+      <div className="property-group">
+        <label>Opacity</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value={selectedShape.opacity !== undefined ? selectedShape.opacity : 1}
+          onChange={handleOpacityChange}
+        />
+        <span className="value-display">{Math.round((selectedShape.opacity !== undefined ? selectedShape.opacity : 1) * 100)}%</span>
+      </div>
+
+      <div className="property-group">
+        <label>Shadow Blur</label>
+        <input
+          type="range"
+          min="0"
+          max="20"
+          value={selectedShape.shadowBlur || 0}
+          onChange={handleShadowBlurChange}
+        />
+        <span className="value-display">{selectedShape.shadowBlur || 0}px</span>
+      </div>
+
+      {(selectedShape.shadowBlur || 0) > 0 && (
+        <div className="property-group">
+          <label>Shadow Color</label>
+          <div className="color-input">
+            <input
+              type="color"
+              value={selectedShape.shadowColor || '#000000'}
+              onChange={handleShadowColorChange}
+            />
+            <input
+              type="text"
+              value={selectedShape.shadowColor || '#000000'}
+              onChange={handleShadowColorChange}
+              className="color-text"
+            />
+          </div>
+        </div>
+      )}
 
       <div className="property-info">
         <small>Type: {selectedShape.type}</small>

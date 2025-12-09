@@ -1,5 +1,6 @@
 import { useDiagram } from '../../store/DiagramContext';
 import { MenuBar } from '../MenuBar/MenuBar';
+import { AlignmentTools } from './AlignmentTools';
 import './Toolbar.css';
 
 export function Toolbar({ stageRef }) {
@@ -43,6 +44,17 @@ export function Toolbar({ stageRef }) {
     });
   };
 
+  const handleUndo = () => {
+    dispatch({ type: 'UNDO' });
+  };
+
+  const handleRedo = () => {
+    dispatch({ type: 'REDO' });
+  };
+
+  const canUndo = state.historyIndex > 0;
+  const canRedo = state.historyIndex < state.history.length - 1;
+
   return (
     <div className="toolbar">
       <div className="toolbar-section">
@@ -51,6 +63,29 @@ export function Toolbar({ stageRef }) {
 
       <div className="toolbar-section">
         <MenuBar stageRef={stageRef} />
+      </div>
+
+      <div className="toolbar-section">
+        <button
+          className="toolbar-button"
+          onClick={handleUndo}
+          disabled={!canUndo}
+          title="Undo (Ctrl+Z)"
+        >
+          ↶ Undo
+        </button>
+        <button
+          className="toolbar-button"
+          onClick={handleRedo}
+          disabled={!canRedo}
+          title="Redo (Ctrl+Y)"
+        >
+          ↷ Redo
+        </button>
+      </div>
+
+      <div className="toolbar-section">
+        <AlignmentTools />
       </div>
 
       <div className="toolbar-section">

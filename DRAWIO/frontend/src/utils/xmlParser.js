@@ -43,6 +43,20 @@ export function shapesToXML(shapes) {
       case SHAPE_TYPES.LINE:
         styleProps.push('line');
         break;
+      case SHAPE_TYPES.CONNECTOR:
+        styleProps.push('connector');
+        break;
+    }
+
+    // Add connector properties for smart connectors
+    if (shape.type === SHAPE_TYPES.CONNECTOR || shape.type === SHAPE_TYPES.LINE) {
+      if (shape.startShapeId) styleProps.push(`startShapeId=${shape.startShapeId}`);
+      if (shape.endShapeId) styleProps.push(`endShapeId=${shape.endShapeId}`);
+      if (shape.startAnchor) styleProps.push(`startAnchor=${shape.startAnchor}`);
+      if (shape.endAnchor) styleProps.push(`endAnchor=${shape.endAnchor}`);
+      if (shape.points) {
+        styleProps.push(`points=${shape.points.join(',')}`);
+      }
     }
 
     cell['@_style'] = styleProps.join(';');
@@ -115,6 +129,7 @@ export function xmlToShapes(xmlString) {
       if (style.includes('ellipse')) type = SHAPE_TYPES.CIRCLE;
       else if (style.includes('rhombus')) type = SHAPE_TYPES.DIAMOND;
       else if (style.includes('arrow')) type = SHAPE_TYPES.ARROW;
+      else if (style.includes('connector')) type = SHAPE_TYPES.CONNECTOR;
       else if (style.includes('line')) type = SHAPE_TYPES.LINE;
 
       // Parse style properties
@@ -143,9 +158,21 @@ export function xmlToShapes(xmlString) {
       } else if (type === SHAPE_TYPES.RECTANGLE || type === SHAPE_TYPES.DIAMOND) {
         shape.width = parseFloat(geometry['@_width']) || 120;
         shape.height = parseFloat(geometry['@_height']) || 60;
-      } else if (type === SHAPE_TYPES.ARROW || type === SHAPE_TYPES.LINE) {
-        shape.points = [0, 0, 100, 0];
-        if (type === SHAPE_TYPES.ARROW) {
+      } else if (type === SHAPE_TYPES.ARROW || type === SHAPE_TYPES.LINE || type === SHAPE_TYPES.CONNECTOR) {
+        // Parse points from style
+        if (styleObj.points) {
+          shape.points = styleObj.points.split(',').map(p => parseFloat(p));
+        } else {
+          shape.points = [0, 0, 100, 0];
+        }
+
+        // Parse connection properties
+        shape.startShapeId = styleObj.startShapeId || null;
+        shape.endShapeId = styleObj.endShapeId || null;
+        shape.startAnchor = styleObj.startAnchor || null;
+        shape.endAnchor = styleObj.endAnchor || null;
+
+        if (type === SHAPE_TYPES.ARROW || type === SHAPE_TYPES.CONNECTOR) {
           shape.pointerLength = 10;
           shape.pointerWidth = 10;
         }

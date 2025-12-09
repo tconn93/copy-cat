@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useDiagram } from '../../store/DiagramContext';
-import { SHAPE_TYPES, DEFAULT_SHAPE_PROPS } from '../../constants/shapeTypes';
+import { SHAPE_CATEGORIES, CATEGORIZED_SHAPES, DEFAULT_SHAPE_PROPS } from '../../constants/shapeTypes';
 import { PropertiesPanel } from './PropertiesPanel';
 import './Sidebar.css';
 
@@ -7,6 +8,7 @@ let shapeCounter = 0;
 
 export function Sidebar() {
   const { dispatch } = useDiagram();
+  const [selectedCategory, setSelectedCategory] = useState(SHAPE_CATEGORIES.BASIC);
 
   const addShape = (type) => {
     const defaultProps = DEFAULT_SHAPE_PROPS[type];
@@ -23,19 +25,24 @@ export function Sidebar() {
     dispatch({ type: 'ADD_SHAPE', payload: newShape });
   };
 
-  const shapes = [
-    { type: SHAPE_TYPES.RECTANGLE, name: 'Rectangle', icon: '▭' },
-    { type: SHAPE_TYPES.CIRCLE, name: 'Circle', icon: '○' },
-    { type: SHAPE_TYPES.DIAMOND, name: 'Diamond', icon: '◇' },
-    { type: SHAPE_TYPES.ARROW, name: 'Arrow', icon: '→' },
-    { type: SHAPE_TYPES.LINE, name: 'Line', icon: '─' },
-  ];
-
   return (
     <div className="sidebar">
       <h3>Shapes</h3>
+
+      <div className="category-tabs">
+        {Object.values(SHAPE_CATEGORIES).map((category) => (
+          <button
+            key={category}
+            className={`category-tab ${selectedCategory === category ? 'active' : ''}`}
+            onClick={() => setSelectedCategory(category)}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
       <div className="shape-library">
-        {shapes.map((shape) => (
+        {CATEGORIZED_SHAPES[selectedCategory].map((shape) => (
           <button
             key={shape.type}
             className="shape-button"
@@ -47,6 +54,7 @@ export function Sidebar() {
           </button>
         ))}
       </div>
+
       <PropertiesPanel />
     </div>
   );
