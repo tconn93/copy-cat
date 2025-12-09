@@ -11,7 +11,12 @@ This repository is a personal collection of projects that are direct copies, for
 - **Original software**: Atlassian JIRA (now known as Jira Software)
 - **Description**: A full copy of an older, cracked/on-premise version of Atlassian JIRA (issue tracking and project management tool).
 - **Purpose in this repo**: Archived for offline reference and historical purposes.
-- **Status**: Non-functional without original licenses/keys; included only as a code snapshot.
-- **Warning**: Distributing or using cracked proprietary software may violate copyright and licensing terms.
+- **Demo is at**: [Jira.tyler.ag](https://jira.tyler.ag)  
+
+
+### Draw.io
+- **Original software**: Draw.io  [Link](https://draw.io)
+- **Description**: A copy of a canvas flow chart design implementation.
+- **Demo is at**: [draw.tyler.ag](https://draw.tyler.ag)
 
 More copied projects may be added over time.
