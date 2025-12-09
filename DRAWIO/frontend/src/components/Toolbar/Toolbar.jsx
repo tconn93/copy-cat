@@ -58,7 +58,7 @@ export function Toolbar({ stageRef }) {
   return (
     <div className="toolbar">
       <div className="toolbar-section">
-        <h2 className="toolbar-title">Draw.io Clone</h2>
+        <h2 className="toolbar-title">Tyler's Drawing Tool</h2>
       </div>
 
       <div className="toolbar-section">
