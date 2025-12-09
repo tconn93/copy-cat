@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const Layout: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
   };
 
   return (
@@ -17,10 +26,13 @@ const Layout: React.FC = () => {
         <div className="navbar-brand">
           <Link to="/projects">JIRA Clone</Link>
         </div>
-        <div className="navbar-menu">
-          <Link to="/projects" className="navbar-item">Projects</Link>
+        <button className="navbar-toggle" onClick={toggleMenu} aria-label="Toggle menu">
+          {menuOpen ? '✕' : '☰'}
+        </button>
+        <div className={`navbar-menu ${menuOpen ? 'active' : ''}`}>
+          <Link to="/projects" className="navbar-item" onClick={closeMenu}>Projects</Link>
           {user?.role === 'ADMIN' && (
-            <Link to="/users" className="navbar-item">Users</Link>
+            <Link to="/users" className="navbar-item" onClick={closeMenu}>Users</Link>
           )}
         </div>
         <div className="navbar-end">
